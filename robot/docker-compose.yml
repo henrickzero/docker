@@ -1,0 +1,17 @@
+services:
+  kasm:
+    container_name: kasm
+    build: .
+    privileged: true
+    ports:
+      - "6080:80"  # Interface gráfica
+      - "8000:8000"  # API de automação
+    restart: always
+    environment:
+      - RESOLUTION=1080x768
+      - DISPLAY=:1
+      - HOME=/root
+      - USER=root
+      - OPENBOX_ARGS=--startup "python /home/ubuntu/app.py"
+      #- OPENBOX_ARGS=--startup firefox http:
+#    entrypoint: ["python", "/app.py"]  

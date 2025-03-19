@@ -1,0 +1,12 @@
+services:
+  x11vnc:
+    container_name: x11
+    build: .
+    privileged: true
+    restart: unless-stopped
+    ports:
+      - "5900:5900"  # Porta do servidor VNC
+      - "6080:6080"  # Porta do noVNC (acesso via navegador)
+    environment:
+
+      - SCREEN_RESOLUTION=1080x768  # Define a resolução da tela virtual
