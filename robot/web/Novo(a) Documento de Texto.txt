@@ -1,0 +1,18 @@
+<div>
+  <h2>Streaming da Imagem</h2>
+  <img [src]="videoUrl" alt="Stream da Imagem">
+</div>
+
+
+
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-stream',
+  templateUrl: './stream.component.html',
+  styleUrls: ['./stream.component.css']
+})
+export class StreamComponent {
+  videoUrl: string = 'http://localhost:5000/video';
+}
