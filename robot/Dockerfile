@@ -38,6 +38,10 @@ EXPOSE 8000
 # Copia o script da API para o container
 COPY app.py /home/ubuntu/app.py
 COPY entrypoint.sh /home/ubuntu/entrypoint.sh
+
+RUN mkdir -p /etc/opt/chrome/policies/managed
+COPY disable_translate.json /etc/opt/chrome/policies/managed/disable_translate.json
+
 RUN chmod +x /home/ubuntu/entrypoint.sh
 
 

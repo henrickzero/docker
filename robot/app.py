@@ -48,7 +48,8 @@ def press_key(key: str):
     pyautogui.press(key)
     return {"status": "Tecla pressionada", "key": key}
 
-subprocess.Popen(["firefox","--kiosk"])
+# subprocess.Popen(["firefox","--kiosk", "https://www.investidor.b3.com.br/login?utm_source=B3_MVP&utm_medium=HM_PF&utm_campaign=menu"])
+subprocess.Popen(["sudo", "google-chrome-stable", "--no-sandbox", "--disable-extensions", "--no-default-browser-check", "--no-first-run", "--disable-translate", "--force-device-scale-factor=0.8", "--kiosk", "https://www.investidor.b3.com.br/login?utm_source=B3_MVP&utm_medium=HM_PF&utm_campaign=menu"])
 if __name__ == "__main__":
     print("Rodando o servidor FastAPI...")
     uvicorn.run(app, host="0.0.0.0", port=8000)
