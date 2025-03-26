@@ -8,6 +8,10 @@ from fastapi import FastAPI
 import pyautogui
 from fastapi.responses import FileResponse
 import uvicorn
+from pymongo import MongoClient
+
+clientDb = MongoClient("mongodb://mongo:27017/")
+db = clientDb["robo"]
 
 print("Iniciando o script...")
 app = FastAPI()
@@ -36,6 +40,12 @@ def get_mouse_position():
 @app.post("/click/")
 def click():
     pyautogui.click()
+    colecao = db["usuarios"]
+    documento = {
+        "nome": "Henrique",
+        "email": "henrique@email.com",
+        "idade": 30
+    }
     return {"status": "Clique executado"}
 
 @app.post("/type/")
@@ -49,7 +59,19 @@ def press_key(key: str):
     return {"status": "Tecla pressionada", "key": key}
 
 # subprocess.Popen(["firefox","--kiosk", "https://www.investidor.b3.com.br/login?utm_source=B3_MVP&utm_medium=HM_PF&utm_campaign=menu"])
-subprocess.Popen(["sudo", "google-chrome-stable", "--no-sandbox", "--disable-extensions", "--no-default-browser-check", "--no-first-run", "--disable-translate", "--force-device-scale-factor=0.8", "--kiosk", "https://www.investidor.b3.com.br/login?utm_source=B3_MVP&utm_medium=HM_PF&utm_campaign=menu"])
+subprocess.Popen(["sudo", 
+"google-chrome-stable", 
+"--no-sandbox",
+"--disable-features=AutoUpdate", 
+"--disable-dev-shm-usage",
+# "--disable-gpu",
+"--disable-extensions", 
+"--no-default-browser-check", 
+"--no-first-run", 
+"--disable-translate", 
+"--force-device-scale-factor=0.8", 
+"--kiosk", 
+"https://www.investidor.b3.com.br/login?utm_source=B3_MVP&utm_medium=HM_PF&utm_campaign=menu"])
 if __name__ == "__main__":
     print("Rodando o servidor FastAPI...")
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -28,6 +28,7 @@ RUN pip install pyautogui
 RUN pip install uvicorn
 RUN pip install pillow
 RUN pip install --upgrade pillow
+RUN pip install pymongo
 #RUN pip install opencv-python
 #RUN pip install opencv-python-headless
 #RUN pip install pytesseract
@@ -42,7 +43,11 @@ COPY entrypoint.sh /home/ubuntu/entrypoint.sh
 RUN mkdir -p /etc/opt/chrome/policies/managed
 COPY disable_translate.json /etc/opt/chrome/policies/managed/disable_translate.json
 
-RUN chmod +x /home/ubuntu/entrypoint.sh
+ENV TZ=America/Sao_Paulo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+
+# RUN chmod +x /home/ubuntu/entrypoint.sh
 
 
 # Comando para iniciar o ambiente gráfico e a API

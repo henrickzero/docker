@@ -1,4 +1,13 @@
 services:
+  mongodb:
+      image: mongo:4.4.6
+      container_name: mongo
+      restart: always
+      environment:
+       - MONGO_INITDB_ROOT_USERNAME=usuario
+       - MONGO_INITDB_ROOT_PASSWORD=senha
+      volumes:
+        - ./mongo_data:/data/db
   kasm:
     container_name: kasm
     build: .
@@ -13,5 +22,7 @@ services:
       - HOME=/root
       - USER=root
       - OPENBOX_ARGS=--startup "python /home/ubuntu/app.py"
-      #- OPENBOX_ARGS=--startup firefox http:
-#    entrypoint: ["python", "/app.py"]  
+    depends_on:
+        - mongodb
+volumes:
+  mongo_data:
