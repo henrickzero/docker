@@ -1,3 +1,4 @@
 robot/mongo_data
 web/node_modules
 web/.vscode
+robot/web/package-lock.json
