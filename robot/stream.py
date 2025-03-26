@@ -1,25 +1,32 @@
-#pip install flask opencv-python
+# pip install flask opencv-python pyautogui numpy
 
 from flask import Flask, Response
 import cv2
 import time
+import pyautogui
+import numpy as np
 
 app = Flask(__name__)
 
-IMAGE_PATH = "screenshot.png"  # Caminho para a imagem que será atualizada constantemente
-
 def generate_frames():
     while True:
-        frame = cv2.imread(IMAGE_PATH)  # Lê a imagem do arquivo
-        if frame is None:
-            continue  # Evita erros caso a imagem não esteja disponível
+        # Captura a tela usando pyautogui
+        screenshot = pyautogui.screenshot()
 
+        # Converte para array NumPy
+        frame = np.array(screenshot)
+
+        # Converte de RGB (Pillow) para BGR (OpenCV)
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+
+        # Codifica a imagem em JPEG
         _, buffer = cv2.imencode('.jpg', frame)
 
+        # Gera o frame para o stream
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 
-        time.sleep(0.1)  # Atualiza a imagem a cada 100ms (~10FPS)
+        time.sleep(0.1)  # Taxa de atualização (~10 FPS)
 
 @app.route('/video')
 def video_feed():

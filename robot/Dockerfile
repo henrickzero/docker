@@ -29,6 +29,8 @@ RUN pip install uvicorn
 RUN pip install pillow
 RUN pip install --upgrade pillow
 RUN pip install pymongo
+RUN pip install flask
+RUN pip install flask opencv-python
 #RUN pip install opencv-python
 #RUN pip install opencv-python-headless
 #RUN pip install pytesseract
@@ -38,6 +40,7 @@ EXPOSE 8000
 
 # Copia o script da API para o container
 COPY app.py /home/ubuntu/app.py
+COPY stream.py /home/ubuntu/stream.py
 COPY entrypoint.sh /home/ubuntu/entrypoint.sh
 
 RUN mkdir -p /etc/opt/chrome/policies/managed

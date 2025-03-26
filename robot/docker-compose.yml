@@ -15,6 +15,7 @@ services:
     ports:
       - "6080:80"  # Interface gráfica
       - "8000:8000"  # API de automação
+      - "5000:5000"  # captura continua
     restart: always
     environment:
       - RESOLUTION=1080x768

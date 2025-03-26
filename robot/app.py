@@ -72,6 +72,9 @@ subprocess.Popen(["sudo",
 "--force-device-scale-factor=0.8", 
 "--kiosk", 
 "https://www.investidor.b3.com.br/login?utm_source=B3_MVP&utm_medium=HM_PF&utm_campaign=menu"])
+
+subprocess.Popen(["python","/home/ubuntu/stream.py"])
+
 if __name__ == "__main__":
     print("Rodando o servidor FastAPI...")
     uvicorn.run(app, host="0.0.0.0", port=8000)
