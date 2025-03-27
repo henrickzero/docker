@@ -31,6 +31,10 @@ export class RoboComponent {
 
   onKeyDown(event: KeyboardEvent): void {
     this.lastKeyPressed = event.key;
+    console.log(this.lastKeyPressed);
+    const url = `http://127.0.0.1:8000/press?key=${this.lastKeyPressed}`;
+    this.http.post(url, {}).subscribe();
+  
   }
 
 

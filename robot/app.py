@@ -70,7 +70,17 @@ def type_text(text: str):
 
 @app.post("/press/")
 def press_key(key: str):
-    pyautogui.press(key)
+    if key == 'ArrowLeft':
+        pyautogui.press('left')
+    elif key == 'ArrowRight':
+        pyautogui.press('right')
+    elif key == 'ArrowUp':
+        pyautogui.press('up')
+    elif key == 'ArrowDown':
+        pyautogui.press('down')
+    else:
+        pyautogui.press(key)
+    
     return {"status": "Tecla pressionada", "key": key}
 
 # subprocess.Popen(["firefox","--kiosk", "https://www.investidor.b3.com.br/login?utm_source=B3_MVP&utm_medium=HM_PF&utm_campaign=menu"])
