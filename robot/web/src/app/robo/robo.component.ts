@@ -33,7 +33,5 @@ export class RoboComponent {
     this.lastKeyPressed = event.key;
   }
 
-  onScroll(event: Event): void {
-    console.log('Scroll event detected:', event);
-  }
+
 }
