@@ -1,10 +1,9 @@
-<div style="display: flex; height: 100vh;" (contextmenu)="$event.preventDefault()">
+<div style="display: flex; height: 100vh; overflow-y: hidden;" (contextmenu)="$event.preventDefault()">
   <!-- Left area for task list -->
   <div style="flex: 1; border-right: 1px solid #ccc; padding: 10px;">
     <h3>Lista de Tarefas</h3>
     <p>Mouse: x: {{ mouseX }}, y: {{ mouseY }}</p>
     <p>Last event mouse: {{ mouseEvent }}</p>
-    <p>Last key pressed: {{ lastKeyPressed }}</p>
   </div>
   
   <!-- Right area for image -->
@@ -12,7 +11,6 @@
     <img [src]="videoUrl" alt="Stream da Imagem" 
          style="width: 1080px; height: 768px; border: 2px solid black;"
          (mousemove)="onMouseMove($event)" 
-         (mousedown)="onMouseDown($event)"
-         (keydown)="onKeyDown($event)" tabindex="0">
+         (mousedown)="onMouseDown($event)">
   </div>
 </div>
