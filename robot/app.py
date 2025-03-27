@@ -5,8 +5,9 @@ subprocess.run("xauth generate :1 . trusted", shell=True)
 subprocess.run("xauth add :1 . $(mcookie)", shell=True)
 
 from fastapi import FastAPI
-import pyautogui
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+import pyautogui
 import uvicorn
 from pymongo import MongoClient
 
@@ -15,6 +16,14 @@ db = clientDb["robo"]
 
 print("Iniciando o script...")
 app = FastAPI()
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4200"],  # Replace with the Angular app's URL
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 print("Iniciando o FastAPI...")
 
 @app.get("/")
@@ -26,6 +35,12 @@ def screenshot():
     file_path = "screenshot.png"
     pyautogui.screenshot().save(file_path)
     return FileResponse(file_path, media_type="image/png")
+
+@app.post("/move_mouse_and_click/")
+def move_mouse(x: int, y: int, duration: float = 1.0, event: str = 'left'):
+    pyautogui.moveTo(x, y, duration=duration)
+    pyautogui.click(button=event)
+    return {"status": "Mouse movido", "x": x, "y": y, "duration": duration}
 
 @app.post("/move_mouse/")
 def move_mouse(x: int, y: int, duration: float = 1.0):
