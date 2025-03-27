@@ -19,7 +19,8 @@ app = FastAPI()
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],  # Replace with the Angular app's URL
+    # allow_origins=["http://localhost:4200"],  # Replace with the Angular app's URL
+    allow_origins=["*"],  # Replace with the Angular app's URL
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods
     allow_headers=["*"],  # Allow all headers
@@ -67,6 +68,11 @@ def click():
 def type_text(text: str):
     pyautogui.write(text, interval=0.1)
     return {"status": "Texto digitado", "text": text}
+
+@app.post("/scroll/")
+def type_text(deltaY: int):
+    pyautogui.scroll(deltaY) 
+    return {"status": "Scroll", "deltaY": deltaY}
 
 @app.post("/press/")
 def press_key(key: str):

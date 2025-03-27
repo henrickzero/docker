@@ -34,8 +34,16 @@ export class RoboComponent {
     console.log(this.lastKeyPressed);
     const url = `http://127.0.0.1:8000/press?key=${this.lastKeyPressed}`;
     this.http.post(url, {}).subscribe();
-  
   }
 
+  onMouseWheel(event: WheelEvent) {
+    if (event.deltaY < 0) {
+      console.log('Scroll para cima', event.deltaY);
+    } else {
+      console.log('Scroll para baixo', event.deltaY);
+    }
+    const url = `http://127.0.0.1:8000/scroll?deltaY=${event.deltaY}`;
+    this.http.post(url, {}).subscribe();
+  }
 
 }
