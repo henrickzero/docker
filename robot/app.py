@@ -71,7 +71,7 @@ subprocess.Popen(["sudo",
 "--disable-translate", 
 "--force-device-scale-factor=0.8", 
 "--kiosk", 
-"https://www.investidor.b3.com.br/login?utm_source=B3_MVP&utm_medium=HM_PF&utm_campaign=menu"])
+"https://investidor10.com.br/"])
 
 subprocess.Popen(["python","/home/ubuntu/stream.py"])
 

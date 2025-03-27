@@ -4,6 +4,7 @@
     <h3>Lista de Tarefas</h3>
     <p>Mouse: x: {{ mouseX }}, y: {{ mouseY }}</p>
     <p>Last event mouse: {{ mouseEvent }}</p>
+    <p>Last key pressed: {{ lastKeyPressed }}</p>
   </div>
   
   <!-- Right area for image -->
@@ -11,6 +12,7 @@
     <img [src]="videoUrl" alt="Stream da Imagem" 
          style="width: 1080px; height: 768px; border: 2px solid black;"
          (mousemove)="onMouseMove($event)" 
-         (mousedown)="onMouseDown($event)">
+         (mousedown)="onMouseDown($event)"
+         (keydown)="onKeyDown($event)" tabindex="0">
   </div>
 </div>

@@ -10,6 +10,7 @@ export class RoboComponent {
   mouseX: number = 0;
   mouseY: number = 0;
   mouseEvent: string = '';
+  lastKeyPressed: string = '';
 
   onMouseMove(event: MouseEvent): void {
     const rect = (event.target as HTMLImageElement).getBoundingClientRect();
@@ -20,5 +21,9 @@ export class RoboComponent {
   onMouseDown(event: MouseEvent): void {
     const buttonMap: { [key: number]: string } = { 0: 'click-left', 1: 'click-middle', 2: 'click-right' };
     this.mouseEvent = buttonMap[event.button] || 'unknown';
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    this.lastKeyPressed = event.key;
   }
 }
