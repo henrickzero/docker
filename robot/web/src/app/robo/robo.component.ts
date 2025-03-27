@@ -24,7 +24,6 @@ export class RoboComponent {
   onMouseDown(event: MouseEvent): void {
     const buttonMap: { [key: number]: string } = { 0: 'left', 1: 'middle', 2: 'right' };
     this.mouseEvent = buttonMap[event.button] || 'unknown';
-
     
     const url = `http://127.0.0.1:8000/move_mouse_and_click?x=${this.mouseX}&y=${this.mouseY}&duration=0&event=${buttonMap[event.button]}`;
     this.http.post(url, {}).subscribe();
