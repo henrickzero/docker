@@ -78,6 +78,8 @@ def press_key(key: str):
         pyautogui.press('up')
     elif key == 'ArrowDown':
         pyautogui.press('down')
+    elif key == '':
+        pyautogui.press('space')
     else:
         pyautogui.press(key)
     
