@@ -21,6 +21,8 @@ RUN apt-get update
 
 RUN apt install gnome-screenshot -y
 
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 #RUN sudo apt install tesseract-ocr -y
 
 RUN pip install fastapi
@@ -49,9 +51,6 @@ COPY disable_translate.json /etc/opt/chrome/policies/managed/disable_translate.j
 ENV TZ=America/Sao_Paulo
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+#COPY --from=build /web/dist/SEU_NOME_DO_PROJETO /usr/share/nginx/html
 
-# RUN chmod +x /home/ubuntu/entrypoint.sh
-
-
-# Comando para iniciar o ambiente gráfico e a API
-#CMD ["/bin/bash", "-c", "python /app.py]
+#CMD ["nginx", "-g", "daemon off;"]

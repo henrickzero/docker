@@ -95,7 +95,7 @@ subprocess.Popen(["sudo",
 "--no-first-run", 
 "--disable-translate", 
 "--force-device-scale-factor=0.8", 
-"--kiosk", 
+# "--kiosk", 
 "https://investidor10.com.br/"])
 
 subprocess.Popen(["python","/home/ubuntu/stream.py"])

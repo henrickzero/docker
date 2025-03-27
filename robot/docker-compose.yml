@@ -13,6 +13,7 @@ services:
     build: .
     privileged: true
     ports:
+      - "80:8080"  # Interface gráfica
       - "6080:80"  # Interface gráfica
       - "8000:8000"  # API de automação
       - "5000:5000"  # captura continua
