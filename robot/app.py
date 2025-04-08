@@ -13,6 +13,7 @@ from pymongo import MongoClient
 
 clientDb = MongoClient("mongodb://mongo:27017/")
 db = clientDb["robo"]
+ 
 
 print("Iniciando o script...")
 app = FastAPI()
@@ -30,6 +31,24 @@ print("Iniciando o FastAPI...")
 @app.get("/")
 def home():
     return {"message": "API de Automação Remota Ativa"}
+
+@app.post("/open/")
+def open(url: str):
+    subprocess.Popen(["sudo", 
+    "google-chrome-stable", 
+    "--no-sandbox",
+    "--disable-features=AutoUpdate", 
+    "--disable-dev-shm-usage",
+    # "--disable-gpu",
+    "--disable-extensions", 
+    "--no-default-browser-check", 
+    "--no-first-run", 
+    "--disable-translate", 
+    "--force-device-scale-factor=0.8", 
+    #  "--kiosk", 
+    url])
+
+    return {"status": "open"}
 
 @app.get("/screenshot")
 def screenshot():
@@ -104,7 +123,7 @@ subprocess.Popen(["sudo",
 "--disable-translate", 
 "--force-device-scale-factor=0.8", 
 # "--kiosk", 
-"https://investidor10.com.br/"])
+"https://www.google.com"])
 
 subprocess.Popen(["python","/home/ubuntu/stream.py"])
 
