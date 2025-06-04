@@ -33,6 +33,7 @@ RUN pip install --upgrade pillow
 RUN pip install pymongo
 RUN pip install flask
 RUN pip install flask opencv-python
+RUN pip install pydantic
 #RUN pip install opencv-python
 #RUN pip install opencv-python-headless
 #RUN pip install pytesseract

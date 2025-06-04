@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms'; // Adicione esta linha
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,6 +15,7 @@ import { RoboComponent } from './robo/robo.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule, // Adicione esta linha
     HttpClientModule
   ],
   providers: [],

@@ -8,12 +8,30 @@ import { HttpClient } from '@angular/common/http';
 })
 export class RoboComponent {
   videoUrl: string = 'http://localhost:5000/video';
+  urlInput: string = ''; // Adicionado para o campo de texto
   mouseX: number = 0;
   mouseY: number = 0;
   mouseEvent: string = '';
   lastKeyPressed: string = '';
 
   constructor(private http: HttpClient) {}
+
+  accessUrl(): void {
+    if (this.urlInput) {
+      const endpoint = 'http://127.0.0.1:8000/open';
+      const body = { url: this.urlInput };
+      this.http.post(endpoint, body).subscribe({
+        next: () => {
+          // Opcional: atualizar videoUrl ou mostrar mensagem de sucesso
+          console.error('OPEN');
+        },
+        error: (err) => {
+          // Opcional: tratar erro
+          console.error('Erro ao acessar a URL:', err);
+        }
+      });
+    }
+  }
 
   onMouseMove(event: MouseEvent): void {
     const rect = (event.target as HTMLImageElement).getBoundingClientRect();

@@ -10,6 +10,10 @@ from fastapi.responses import FileResponse
 import pyautogui
 import uvicorn
 from pymongo import MongoClient
+from pydantic import BaseModel
+
+class UrlRequest(BaseModel):
+    url: str
 
 clientDb = MongoClient("mongodb://mongo:27017/")
 db = clientDb["robo"]
@@ -32,10 +36,11 @@ print("Iniciando o FastAPI...")
 def home():
     return {"message": "API de Automação Remota Ativa"}
 
-@app.post("/open/")
-def open(url: str):
+@app.post("/open")
+def open(request: UrlRequest):
     subprocess.Popen(["sudo", 
     "google-chrome-stable", 
+    "--user-data-dir=/tmp/chrome-profile",
     "--no-sandbox",
     "--disable-features=AutoUpdate", 
     "--disable-dev-shm-usage",
@@ -45,9 +50,16 @@ def open(url: str):
     "--no-first-run", 
     "--disable-translate", 
     "--force-device-scale-factor=0.8", 
-    #  "--kiosk", 
-    url])
+    "--kiosk", 
+    request.url])
 
+    return {"status": "open"}
+
+@app.post("/open2")
+def open(request: UrlRequest):
+    pyautogui.hotkey('ctrl', 'l')
+    pyautogui.write(request.url, interval=0.05)
+    pyautogui.press('enter')
     return {"status": "open"}
 
 @app.get("/screenshot")
@@ -90,7 +102,11 @@ def type_text(text: str):
 
 @app.post("/scroll/")
 def type_text(deltaY: int):
-    pyautogui.scroll(deltaY) 
+    if (deltaY < 0):
+        pyautogui.press('up')
+    else:
+        pyautogui.press('down')
+    
     return {"status": "Scroll", "deltaY": deltaY}
 
 @app.post("/press/")
@@ -113,6 +129,7 @@ def press_key(key: str):
 # subprocess.Popen(["firefox","--kiosk", "https://www.investidor.b3.com.br/login?utm_source=B3_MVP&utm_medium=HM_PF&utm_campaign=menu"])
 subprocess.Popen(["sudo", 
 "google-chrome-stable", 
+"--user-data-dir=/tmp/chrome-profile",
 "--no-sandbox",
 "--disable-features=AutoUpdate", 
 "--disable-dev-shm-usage",
@@ -122,7 +139,7 @@ subprocess.Popen(["sudo",
 "--no-first-run", 
 "--disable-translate", 
 "--force-device-scale-factor=0.8", 
-# "--kiosk", 
+"--kiosk", 
 "https://www.google.com"])
 
 subprocess.Popen(["python","/home/ubuntu/stream.py"])
