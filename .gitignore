@@ -2,5 +2,7 @@ robot/mongo_data
 web/node_modules
 web/.vscode
 robot/web/package-lock.json
+robot/web/node_modules
+robot/web/dist
 ia/chroma_storage
 ia/chroma_storage_local

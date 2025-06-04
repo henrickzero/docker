@@ -51,6 +51,7 @@ COPY disable_translate.json /etc/opt/chrome/policies/managed/disable_translate.j
 ENV TZ=America/Sao_Paulo
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-#COPY --from=build /web/dist/SEU_NOME_DO_PROJETO /usr/share/nginx/html
+COPY ./web/dist/web/ /usr/share/nginx/html/
+
 
 #CMD ["nginx", "-g", "daemon off;"]
