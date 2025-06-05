@@ -14,6 +14,10 @@ export class RoboComponent {
   mouseEvent: string = '';
   lastKeyPressed: string = '';
 
+  // Variáveis de estado para os botões
+  gravando: boolean = false;
+  executando: boolean = false;
+
   constructor(private http: HttpClient) {}
 
   accessUrl(): void {
@@ -62,6 +66,24 @@ export class RoboComponent {
     }
     const url = `http://127.0.0.1:8000/scroll?deltaY=${event.deltaY}`;
     this.http.post(url, {}).subscribe();
+  }
+
+  onGravar(): void {
+    this.gravando = true;
+    this.executando = false;
+    console.log('Gravar clicado');
+  }
+
+  onParar(): void {
+    this.gravando = false;
+    this.executando = false;
+    console.log('Parar clicado');
+  }
+
+  onExecutar(): void {
+    this.executando = true;
+    this.gravando = false;
+    console.log('Executar clicado');
   }
 
 }

@@ -4,6 +4,7 @@ import subprocess
 subprocess.run("xauth generate :1 . trusted", shell=True)
 subprocess.run("xauth add :1 . $(mcookie)", shell=True)
 
+from typing import List
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -14,6 +15,17 @@ from pydantic import BaseModel
 
 class UrlRequest(BaseModel):
     url: str
+
+class GnericRequest(BaseModel):
+    type: str
+    url: str
+    x: int
+    y: int
+    duration: float
+    event: str
+    text: str
+    deltaY: int
+    key: str
 
 clientDb = MongoClient("mongodb://mongo:27017/")
 db = clientDb["robo"]
@@ -36,8 +48,31 @@ print("Iniciando o FastAPI...")
 def home():
     return {"message": "API de Automação Remota Ativa"}
 
+
+@app.post("/generic")
+def open(generics: List[GnericRequest]):
+
+    for item in generics:
+        if item.type == 'open':
+            open()
+        elif item.type == 'move_mouse_and_click':
+            move_mouse(item.x, item.y, item.duration, item.event)
+        elif item.type == 'move_mouse':
+            move_mouse(item.x, item.y, item.duration)
+        elif item.type == 'type':
+            type_text(item.text)
+        elif item.type == 'scroll':
+            scroll(item.deltaY)
+        elif item.type == 'press':
+            press_key(item.key)
+    return {"status": "generic"}
+
+
 @app.post("/open")
 def open(request: UrlRequest):
+    return open(request.url)
+
+def open(url: str):
     subprocess.Popen(["sudo", 
     "google-chrome-stable", 
     "--user-data-dir=/tmp/chrome-profile",
@@ -51,16 +86,9 @@ def open(request: UrlRequest):
     "--disable-translate", 
     "--force-device-scale-factor=0.8", 
     "--kiosk", 
-    request.url])
-
+    url])
     return {"status": "open"}
 
-@app.post("/open2")
-def open(request: UrlRequest):
-    pyautogui.hotkey('ctrl', 'l')
-    pyautogui.write(request.url, interval=0.05)
-    pyautogui.press('enter')
-    return {"status": "open"}
 
 @app.get("/screenshot")
 def screenshot():
@@ -101,7 +129,7 @@ def type_text(text: str):
     return {"status": "Texto digitado", "text": text}
 
 @app.post("/scroll/")
-def type_text(deltaY: int):
+def scroll(deltaY: int):
     if (deltaY < 0):
         pyautogui.press('up')
     else:

@@ -2,10 +2,14 @@
   <!-- Left area for task list -->
   <div style="flex: 1; border-right: 1px solid #ccc; padding: 10px;">
     <h3>Lista de Tarefas</h3>
+    <!-- Botões solicitados -->
+    <div style="margin-bottom: 16px; display: flex; gap: 8px;">
+      <button (click)="onGravar()" [disabled]="gravando || executando">Gravar</button>
+      <button (click)="onParar()" [disabled]="!gravando && !executando">Parar</button>
+      <button (click)="onExecutar()" [disabled]="executando || gravando">Executar</button>
+    </div>
     <input type="text" placeholder="Digite uma URL" [(ngModel)]="urlInput" style="width: 80%; margin-bottom: 8px;">
     <button (click)="accessUrl()">Acessar</button>
-    <p>Mouse: x: {{ mouseX }}, y: {{ mouseY }}</p>
-    <p>Last event mouse: {{ mouseEvent }}</p>
   </div>
   
   <!-- Right area for image -->
