@@ -10,6 +10,11 @@
     </div>
     <input type="text" placeholder="Digite uma URL" [(ngModel)]="urlInput" style="width: 80%; margin-bottom: 8px;">
     <button (click)="accessUrl()">Acessar</button>
+
+    Eventos: ({{ events.length }})
+    <ul>
+      <li *ngFor="let event of events">{{ event.id }} - {{ event.type }}</li>
+    </ul>
   </div>
   
   <!-- Right area for image -->

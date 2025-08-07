@@ -27,7 +27,7 @@ export class RoboComponent {
       const body = { url: this.urlInput };
 
       if(this.gravando){
-        this.events.push({id:this.events.length, type:"URL", url:this.urlInput});
+        this.events.push({id:this.events.length, type:"URL", url:this.urlInput, time:new Date().toISOString()});
       }
 
       this.http.post(endpoint, body).subscribe({
@@ -49,7 +49,7 @@ export class RoboComponent {
     this.mouseY = Math.floor(event.clientY - rect.top);
 
       if(this.gravando){
-        this.events.push({id:this.events.length, type:"MOUSE_MOVE", mouseX:this.mouseX, mouseY:this.mouseY});
+        this.events.push({id:this.events.length, type:"MOUSE_MOVE", mouseX:this.mouseX, mouseY:this.mouseY, time:new Date().toISOString()});
       }
   }
 
@@ -58,7 +58,7 @@ export class RoboComponent {
     this.mouseEvent = buttonMap[event.button] || 'unknown';
 
       if(this.gravando){
-        this.events.push({id:this.events.length, type:"MOUSE_DOWN", mouseX:this.mouseX, mouseY:this.mouseY, event:buttonMap[event.button]});
+        this.events.push({id:this.events.length, type:"MOUSE_DOWN", mouseX:this.mouseX, mouseY:this.mouseY, event:buttonMap[event.button], time:new Date().toISOString()});
       }
     
     const url = `http://127.0.0.1:8000/move_mouse_and_click?x=${this.mouseX}&y=${this.mouseY}&duration=0&event=${buttonMap[event.button]}`;
@@ -70,7 +70,7 @@ export class RoboComponent {
     console.log(this.lastKeyPressed);
 
       if(this.gravando){
-        this.events.push({id:this.events.length, type:"KEY", lastKeyPressed:this.lastKeyPressed});
+        this.events.push({id:this.events.length, type:"KEY", lastKeyPressed:this.lastKeyPressed, time:new Date().toISOString()});
       }
 
     const url = `http://127.0.0.1:8000/press?key=${this.lastKeyPressed}`;
@@ -84,7 +84,7 @@ export class RoboComponent {
       console.log('Scroll para baixo', event.deltaY);
     }
       if(this.gravando){
-        this.events.push({id:this.events.length, type:"MOUSE_WHEEL", deltaY:event.deltaY});
+        this.events.push({id:this.events.length, type:"MOUSE_WHEEL", deltaY:event.deltaY, time:new Date().toISOString()});
       }
     const url = `http://127.0.0.1:8000/scroll?deltaY=${event.deltaY}`;
     this.http.post(url, {}).subscribe();
