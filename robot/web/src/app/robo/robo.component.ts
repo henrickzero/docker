@@ -27,7 +27,7 @@ export class RoboComponent {
       const body = { url: this.urlInput };
 
       if(this.gravando){
-        this.events.push({id:this.events.length, type:"URL", url:this.urlInput, time:new Date().toISOString()});
+        this.events.push({id:this.events.length, type:"open", url:this.urlInput, time:new Date().toISOString()});
       }
 
       this.http.post(endpoint, body).subscribe({
