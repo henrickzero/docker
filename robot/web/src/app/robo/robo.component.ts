@@ -51,6 +51,8 @@ export class RoboComponent {
       if(this.gravando){
         this.events.push({id:this.events.length, type:"MOUSE_MOVE", mouseX:this.mouseX, mouseY:this.mouseY, time:new Date().toISOString()});
       }
+    const url = `http://127.0.0.1:8000/move_mouse?x=${this.mouseX}&y=${this.mouseY}&duration=0`;
+    this.http.post(url, {}).subscribe();
   }
 
   onMouseDown(event: MouseEvent): void {
