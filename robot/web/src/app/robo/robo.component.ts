@@ -13,6 +13,7 @@ export class RoboComponent {
   mouseY: number = 0;
   mouseEvent: string = '';
   lastKeyPressed: string = '';
+  events: any[] = [];
 
   // Variáveis de estado para os botões
   gravando: boolean = false;
@@ -24,6 +25,11 @@ export class RoboComponent {
     if (this.urlInput) {
       const endpoint = 'http://127.0.0.1:8000/open';
       const body = { url: this.urlInput };
+
+      if(this.gravando){
+        this.events.push({id:this.events.length, type:"URL", url:this.urlInput});
+      }
+
       this.http.post(endpoint, body).subscribe({
         next: () => {
           // Opcional: atualizar videoUrl ou mostrar mensagem de sucesso
@@ -41,11 +47,19 @@ export class RoboComponent {
     const rect = (event.target as HTMLImageElement).getBoundingClientRect();
     this.mouseX = Math.floor(event.clientX - rect.left);
     this.mouseY = Math.floor(event.clientY - rect.top);
+
+      if(this.gravando){
+        this.events.push({id:this.events.length, type:"MOUSE_MOVE", mouseX:this.mouseX, mouseY:this.mouseY});
+      }
   }
 
   onMouseDown(event: MouseEvent): void {
     const buttonMap: { [key: number]: string } = { 0: 'left', 1: 'middle', 2: 'right' };
     this.mouseEvent = buttonMap[event.button] || 'unknown';
+
+      if(this.gravando){
+        this.events.push({id:this.events.length, type:"MOUSE_DOWN", mouseX:this.mouseX, mouseY:this.mouseY, event:buttonMap[event.button]});
+      }
     
     const url = `http://127.0.0.1:8000/move_mouse_and_click?x=${this.mouseX}&y=${this.mouseY}&duration=0&event=${buttonMap[event.button]}`;
     this.http.post(url, {}).subscribe();
@@ -54,6 +68,11 @@ export class RoboComponent {
   onKeyDown(event: KeyboardEvent): void {
     this.lastKeyPressed = event.key;
     console.log(this.lastKeyPressed);
+
+      if(this.gravando){
+        this.events.push({id:this.events.length, type:"KEY", lastKeyPressed:this.lastKeyPressed});
+      }
+
     const url = `http://127.0.0.1:8000/press?key=${this.lastKeyPressed}`;
     this.http.post(url, {}).subscribe();
   }
@@ -64,6 +83,9 @@ export class RoboComponent {
     } else {
       console.log('Scroll para baixo', event.deltaY);
     }
+      if(this.gravando){
+        this.events.push({id:this.events.length, type:"MOUSE_WHEEL", deltaY:event.deltaY});
+      }
     const url = `http://127.0.0.1:8000/scroll?deltaY=${event.deltaY}`;
     this.http.post(url, {}).subscribe();
   }
@@ -71,6 +93,7 @@ export class RoboComponent {
   onGravar(): void {
     this.gravando = true;
     this.executando = false;
+    this.events = [];
     console.log('Gravar clicado');
   }
 
