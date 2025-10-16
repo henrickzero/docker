@@ -11,21 +11,20 @@ from fastapi.responses import FileResponse
 import pyautogui
 import uvicorn
 from pymongo import MongoClient
+from typing import Optional
 from pydantic import BaseModel
 
-class UrlRequest(BaseModel):
-    url: str
-
-class GnericRequest(BaseModel):
-    type: str
-    url: str
-    x: int
-    y: int
-    duration: float
-    event: str
-    text: str
-    deltaY: int
-    key: str
+class GenericRequest(BaseModel):
+    id: Optional[int] = None
+    type: Optional[str] = None
+    url: Optional[str] = None
+    x: Optional[int] = None
+    y: Optional[int] = None
+    duration: Optional[float] = None
+    event: Optional[str] = None
+    text: Optional[str] = None
+    deltaY: Optional[int] = None
+    key: Optional[str] = None
 
 clientDb = MongoClient("mongodb://mongo:27017/")
 db = clientDb["robo"]
@@ -58,11 +57,12 @@ def home():
 
 
 @app.post("/generic")
-def open(generics: List[GnericRequest]):
-
+def generic(generics: List[GenericRequest]):
+    print("generics->")
     for item in generics:
         if item.type == 'open':
-            open()
+            print("open")
+            open(generics)
         elif item.type == 'move_mouse_and_click':
             move_mouse(item.x, item.y, item.duration, item.event)
         elif item.type == 'move_mouse':
@@ -77,10 +77,10 @@ def open(generics: List[GnericRequest]):
 
 
 @app.post("/open")
-def open(request: UrlRequest):
-    return open(request.url)
+def open(request: GenericRequest):
+    return openUrl(request.url)
 
-def open(url: str):
+def openUrl(url: str):
     subprocess.Popen(["sudo", 
     "google-chrome-stable", 
     "--user-data-dir=/tmp/chrome-profile",
@@ -182,4 +182,4 @@ subprocess.Popen(["python","/home/ubuntu/stream.py"])
 
 if __name__ == "__main__":
     print("Rodando o servidor FastAPI...")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8001)

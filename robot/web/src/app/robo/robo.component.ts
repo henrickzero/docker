@@ -33,7 +33,7 @@ export class RoboComponent {
       this.http.post(endpoint, body).subscribe({
         next: () => {
           // Opcional: atualizar videoUrl ou mostrar mensagem de sucesso
-          console.error('OPEN');
+          console.log('OPEN');
         },
         error: (err) => {
           // Opcional: tratar erro
@@ -60,7 +60,7 @@ export class RoboComponent {
     this.mouseEvent = buttonMap[event.button] || 'unknown';
 
       if(this.gravando){
-        this.events.push({id:this.events.length, type:"MOUSE_DOWN", mouseX:this.mouseX, mouseY:this.mouseY, event:buttonMap[event.button], time:new Date().toISOString()});
+        this.events.push({id:this.events.length, type:"move_mouse_and_click", mouseX:this.mouseX, mouseY:this.mouseY, event:buttonMap[event.button], time:new Date().toISOString()});
       }
     
     const url = `http://127.0.0.1:8000/move_mouse_and_click?x=${this.mouseX}&y=${this.mouseY}&duration=0&event=${buttonMap[event.button]}`;
@@ -108,7 +108,19 @@ export class RoboComponent {
   onExecutar(): void {
     this.executando = true;
     this.gravando = false;
-    console.log('Executar clicado');
+    const url = `http://127.0.0.1:8001/generic`;
+    console.log('onExecutar', this.events);
+    this.http.post(url, this.events).subscribe({
+        next: () => {
+          // Opcional: atualizar videoUrl ou mostrar mensagem de sucesso
+          console.log('generic');
+        },
+        error: (err) => {
+          // Opcional: tratar erro
+          console.error('Erro ao acessar a URL:', err);
+        }
+      });
+    
   }
 
 }
