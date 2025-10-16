@@ -33,11 +33,19 @@ db = clientDb["robo"]
 
 print("Iniciando o script...")
 app = FastAPI()
+
+origins = [
+    "http://localhost:4200",
+    "http://127.0.0.1:4200",
+    "http://localhost:80",
+    "http://127.0.0.1:80",
+    "*"
+]
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
     # allow_origins=["http://localhost:4200"],  # Replace with the Angular app's URL
-    allow_origins=["*"],  # Replace with the Angular app's URL
+    allow_origins=origins,  # Replace with the Angular app's URL
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods
     allow_headers=["*"],  # Allow all headers
