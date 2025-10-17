@@ -11,6 +11,7 @@ export class RoboComponent {
   urlInput: string = ''; // Adicionado para o campo de texto
   mouseX: number = 0;
   mouseY: number = 0;
+  duration: number = 0;
   mouseEvent: string = '';
   lastKeyPressed: string = '';
   events: any[] = [];
@@ -60,7 +61,7 @@ export class RoboComponent {
     this.mouseEvent = buttonMap[event.button] || 'unknown';
 
       if(this.gravando){
-        this.events.push({id:this.events.length, type:"move_mouse_and_click", mouseX:this.mouseX, mouseY:this.mouseY, event:buttonMap[event.button], time:new Date().toISOString()});
+        this.events.push({id:this.events.length, type:"move_mouse_and_click", duration:0.0, x:this.mouseX, y:this.mouseY, event:buttonMap[event.button], time:new Date().toISOString()});
       }
     
     const url = `http://127.0.0.1:8000/move_mouse_and_click?x=${this.mouseX}&y=${this.mouseY}&duration=0&event=${buttonMap[event.button]}`;
@@ -108,7 +109,7 @@ export class RoboComponent {
   onExecutar(): void {
     this.executando = true;
     this.gravando = false;
-    const url = `http://127.0.0.1:8001/generic`;
+    const url = `http://127.0.0.1:8000/generic`;
     console.log('onExecutar', this.events);
     this.http.post(url, this.events).subscribe({
         next: () => {

@@ -13,6 +13,8 @@ import uvicorn
 from pymongo import MongoClient
 from typing import Optional
 from pydantic import BaseModel
+from datetime import datetime
+import time
 
 class GenericRequest(BaseModel):
     id: Optional[int] = None
@@ -25,6 +27,7 @@ class GenericRequest(BaseModel):
     text: Optional[str] = None
     deltaY: Optional[int] = None
     key: Optional[str] = None
+    time: Optional[datetime] = None
 
 clientDb = MongoClient("mongodb://mongo:27017/")
 db = clientDb["robo"]
@@ -58,13 +61,24 @@ def home():
 
 @app.post("/generic")
 def generic(generics: List[GenericRequest]):
-    print("generics->")
+    newTime = 0
     for item in generics:
+        millis = int(item.time.microsecond / 1000)
+        if newTime==0:
+            newTime = item.time
+        else:
+            delta = item.time - newTime
+            millis = int(delta.total_seconds() * 1000)
+            newTime = item.time     
+            print(item.id)  
+            print(millis)
+            time.sleep(millis / 1000)
+
+
         if item.type == 'open':
-            print("open")
-            open(generics)
+            open(item)
         elif item.type == 'move_mouse_and_click':
-            move_mouse(item.x, item.y, item.duration, item.event)
+            move_mouse_and_click(item.x, item.y, item.duration, item.event)
         elif item.type == 'move_mouse':
             move_mouse(item.x, item.y, item.duration)
         elif item.type == 'type':
@@ -105,7 +119,8 @@ def screenshot():
     return FileResponse(file_path, media_type="image/png")
 
 @app.post("/move_mouse_and_click/")
-def move_mouse(x: int, y: int, duration: float = 1.0, event: str = 'left'):
+def move_mouse_and_click(x: int, y: int, duration: float = 1.0, event: str = 'left'):
+    print("move_mouse")
     pyautogui.moveTo(x, y, duration=duration)
     pyautogui.click(button=event)
     return {"status": "Mouse movido", "x": x, "y": y, "duration": duration}
@@ -182,4 +197,4 @@ subprocess.Popen(["python","/home/ubuntu/stream.py"])
 
 if __name__ == "__main__":
     print("Rodando o servidor FastAPI...")
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
