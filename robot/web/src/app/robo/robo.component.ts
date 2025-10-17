@@ -9,6 +9,8 @@ import { HttpClient } from '@angular/common/http';
 export class RoboComponent {
   videoUrl: string = 'http://localhost:5000/video';
   urlInput: string = ''; // Adicionado para o campo de texto
+  textInput: string = '';
+  keyInput: string = '';
   mouseX: number = 0;
   mouseY: number = 0;
   duration: number = 0;
@@ -35,6 +37,28 @@ export class RoboComponent {
         next: () => {
           // Opcional: atualizar videoUrl ou mostrar mensagem de sucesso
           console.log('OPEN');
+        },
+        error: (err) => {
+          // Opcional: tratar erro
+          console.error('Erro ao acessar a URL:', err);
+        }
+      });
+    }
+  }
+
+    sendText(): void {
+    if (this.textInput && this.keyInput) {
+      const endpoint = `http://127.0.0.1:8000/text?text=${this.textInput}`;
+      const body = { text: this.textInput };
+
+      if(this.gravando){
+        this.events.push({id:this.events.length, type:"text", text:this.textInput, key:this.keyInput, time:new Date().toISOString()});
+      }
+
+      this.http.post(endpoint, body).subscribe({
+        next: () => {
+          // Opcional: atualizar videoUrl ou mostrar mensagem de sucesso
+          console.log('TEXT');
         },
         error: (err) => {
           // Opcional: tratar erro
@@ -73,7 +97,7 @@ export class RoboComponent {
     console.log(this.lastKeyPressed);
 
       if(this.gravando){
-        this.events.push({id:this.events.length, type:"KEY", lastKeyPressed:this.lastKeyPressed, time:new Date().toISOString()});
+        this.events.push({id:this.events.length, type:"press", key:this.lastKeyPressed, time:new Date().toISOString()});
       }
 
     const url = `http://127.0.0.1:8000/press?key=${this.lastKeyPressed}`;
@@ -87,7 +111,7 @@ export class RoboComponent {
       console.log('Scroll para baixo', event.deltaY);
     }
       if(this.gravando){
-        this.events.push({id:this.events.length, type:"MOUSE_WHEEL", deltaY:event.deltaY, time:new Date().toISOString()});
+        this.events.push({id:this.events.length, type:"scroll", deltaY:event.deltaY, time:new Date().toISOString()});
       }
     const url = `http://127.0.0.1:8000/scroll?deltaY=${event.deltaY}`;
     this.http.post(url, {}).subscribe();

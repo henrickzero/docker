@@ -10,6 +10,9 @@
     </div>
     <input type="text" placeholder="Digite uma URL" [(ngModel)]="urlInput" style="width: 80%; margin-bottom: 8px;">
     <button (click)="accessUrl()">Acessar</button>
+    <input type="text" placeholder="Chave" [(ngModel)]="keyInput" style="width: 30%; margin-bottom: 8px;"> 
+    <input type="text" placeholder="Digite um texto" [(ngModel)]="textInput" style="width: 50%; margin-bottom: 8px;">
+    <button (click)="sendText()">Enviar</button>
 
     Eventos: ({{ events.length }})
     <ul>

@@ -81,7 +81,7 @@ def generic(generics: List[GenericRequest]):
             move_mouse_and_click(item.x, item.y, item.duration, item.event)
         elif item.type == 'move_mouse':
             move_mouse(item.x, item.y, item.duration)
-        elif item.type == 'type':
+        elif item.type == 'text':
             type_text(item.text)
         elif item.type == 'scroll':
             scroll(item.deltaY)
@@ -146,7 +146,7 @@ def click():
     }
     return {"status": "Clique executado"}
 
-@app.post("/type/")
+@app.post("/text/")
 def type_text(text: str):
     pyautogui.write(text, interval=0.1)
     return {"status": "Texto digitado", "text": text}
