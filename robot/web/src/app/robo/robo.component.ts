@@ -36,7 +36,6 @@ export class RoboComponent {
       this.http.post(endpoint, body).subscribe({
         next: () => {
           // Opcional: atualizar videoUrl ou mostrar mensagem de sucesso
-          console.log('OPEN');
         },
         error: (err) => {
           // Opcional: tratar erro
@@ -58,7 +57,6 @@ export class RoboComponent {
       this.http.post(endpoint, body).subscribe({
         next: () => {
           // Opcional: atualizar videoUrl ou mostrar mensagem de sucesso
-          console.log('TEXT');
         },
         error: (err) => {
           // Opcional: tratar erro
@@ -94,22 +92,14 @@ export class RoboComponent {
 
   onKeyDown(event: KeyboardEvent): void {
     this.lastKeyPressed = event.key;
-    console.log(this.lastKeyPressed);
-
       if(this.gravando){
         this.events.push({id:this.events.length, type:"press", key:this.lastKeyPressed, time:new Date().toISOString()});
       }
-
     const url = `http://127.0.0.1:8000/press?key=${this.lastKeyPressed}`;
     this.http.post(url, {}).subscribe();
   }
 
   onMouseWheel(event: WheelEvent) {
-    if (event.deltaY < 0) {
-      console.log('Scroll para cima', event.deltaY);
-    } else {
-      console.log('Scroll para baixo', event.deltaY);
-    }
       if(this.gravando){
         this.events.push({id:this.events.length, type:"scroll", deltaY:event.deltaY, time:new Date().toISOString()});
       }
@@ -121,13 +111,11 @@ export class RoboComponent {
     this.gravando = true;
     this.executando = false;
     this.events = [];
-    console.log('Gravar clicado');
   }
 
   onParar(): void {
     this.gravando = false;
     this.executando = false;
-    console.log('Parar clicado');
   }
 
   onExecutar(): void {
@@ -138,7 +126,6 @@ export class RoboComponent {
     this.http.post(url, this.events).subscribe({
         next: () => {
           // Opcional: atualizar videoUrl ou mostrar mensagem de sucesso
-          console.log('generic');
         },
         error: (err) => {
           // Opcional: tratar erro

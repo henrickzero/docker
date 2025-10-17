@@ -46,7 +46,6 @@ origins = [
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    # allow_origins=["http://localhost:4200"],  # Replace with the Angular app's URL
     allow_origins=origins,  # Replace with the Angular app's URL
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods
