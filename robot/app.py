@@ -18,6 +18,9 @@ import time
 
 first = 0 
 
+# Variável global para armazenar pares chave-valor
+global_store = {}
+
 class GenericRequest(BaseModel):
     id: Optional[int] = None
     type: Optional[str] = None
@@ -30,6 +33,11 @@ class GenericRequest(BaseModel):
     deltaY: Optional[int] = None
     key: Optional[str] = None
     time: Optional[datetime] = None
+
+class MapRequest(BaseModel):
+    key: Optional[str] = None
+    value: Optional[str] = None
+
 
 clientDb = MongoClient("mongodb://mongo:27017/")
 db = clientDb["robo"]
@@ -58,6 +66,18 @@ print("Iniciando o FastAPI...")
 @app.get("/")
 def home():
     return {"message": "API de Automação Remota Ativa"}
+
+# Endpoint para armazenar chave e valor na variável global
+@app.post("/set_value/")
+def set_value(map: MapRequest):
+    global_store[map.key] = map.value
+    return {"status": "Valor armazenado", "key": map.key, "value": map.value}
+
+# Endpoint para recuperar valor da variável global por chave
+@app.get("/get_value/{key}")
+def get_value(key: str):
+    value = global_store.get(key, None)
+    return {"key": key, "value": value}
 
 
 @app.post("/generic")
