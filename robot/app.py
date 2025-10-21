@@ -16,7 +16,7 @@ from pydantic import BaseModel
 from datetime import datetime
 import time
 
-countTab = 0 
+first = 0 
 
 class GenericRequest(BaseModel):
     id: Optional[int] = None
@@ -88,6 +88,8 @@ def generic(generics: List[GenericRequest]):
             scroll(item.deltaY)
         elif item.type == 'press':
             press_key(item.key)
+        elif item.type == 'hotkey':
+            hotkey(item.text)
     return {"status": "generic"}
 
 
@@ -96,7 +98,9 @@ def open(request: GenericRequest):
     return openUrl(request.url)
 
 def openUrl(url: str): 
-    # pyautogui.hotkey('ctrl', 'w')
+    # if(first == 1):
+    #     pyautogui.hotkey('ctrl', 'w')
+
     subprocess.Popen(["sudo", 
     "google-chrome-stable", 
     "--user-data-dir=/tmp/chrome-profile",
@@ -115,6 +119,7 @@ def openUrl(url: str):
      "--disable-save-password-bubble",
      "--password-store=basic",
     url])
+    # first = 1
     pyautogui.hotkey('f11')
     return {"status": "open"}
 
@@ -157,6 +162,11 @@ def click():
 def type_text(text: str):
     pyautogui.write(text, interval=0.1)
     return {"status": "Texto digitado", "text": text}
+
+@app.post("/hotkey/")
+def hotkey(key: str):
+    pyautogui.hotkey(key)
+    return {"status": "HotKey", "key": key}
 
 @app.post("/scroll/")
 def scroll(deltaY: int):

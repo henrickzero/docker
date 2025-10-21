@@ -13,6 +13,8 @@
     <input type="text" placeholder="Chave" [(ngModel)]="keyInput" style="width: 30%; margin-bottom: 8px;"> 
     <input type="text" placeholder="Digite um texto" [(ngModel)]="textInput" style="width: 50%; margin-bottom: 8px;">
     <button (click)="sendText()">Enviar</button>
+    <input type="text" placeholder="Digite a HotKey" [(ngModel)]="hotKeyInput" style="width: 80%; margin-bottom: 8px;">
+    <button (click)="sendHotKey()">Acessar</button>
     <button (click)="get()">Acessar</button>
 
     Eventos: ({{ events.length }})

@@ -10,6 +10,7 @@ export class RoboComponent {
   videoUrl: string = 'http://localhost:5000/video';
   urlInput: string = ''; // Adicionado para o campo de texto
   textInput: string = '';
+  hotKeyInput: string = '';
   keyInput: string = '';
   mouseX: number = 0;
   mouseY: number = 0;
@@ -40,6 +41,27 @@ export class RoboComponent {
         error: (err) => {
           // Opcional: tratar erro
           console.error('Erro ao acessar a URL:', err);
+        }
+      });
+    }
+  }
+
+  sendHotKey(): void {
+    if (this.hotKeyInput) {
+      const endpoint = `http://127.0.0.1:8000/hotkey?key=${this.hotKeyInput}`;
+      const body = { text: this.hotKeyInput };
+
+      if(this.gravando){
+        this.events.push({id:this.events.length, type:"hotkey", text:this.hotKeyInput, time:new Date().toISOString()});
+      }
+
+      this.http.post(endpoint, body).subscribe({
+        next: () => {
+          // Opcional: atualizar videoUrl ou mostrar mensagem de sucesso
+        },
+        error: (err) => {
+          // Opcional: tratar erro
+          console.error('Erro ao enviar a HotKey:', err);
         }
       });
     }
