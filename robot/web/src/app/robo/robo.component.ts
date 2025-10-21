@@ -66,6 +66,26 @@ export class RoboComponent {
     }
   }
 
+  get(): void {
+
+      const endpoint = `http://127.0.0.1:8000/getvalue`;
+      const body = { text: this.textInput };
+
+      if(this.gravando){
+        this.events.push({id:this.events.length, type:"text", text:this.textInput, key:this.keyInput, time:new Date().toISOString()});
+      }
+
+      this.http.get(endpoint).subscribe({
+        next: () => {
+          // Opcional: atualizar videoUrl ou mostrar mensagem de sucesso
+        },
+        error: (err) => {
+          // Opcional: tratar erro
+          console.error('Erro ao acessar a URL:', err);
+        }
+      });
+  }
+
   onMouseMove(event: MouseEvent): void {
     const rect = (event.target as HTMLImageElement).getBoundingClientRect();
     this.mouseX = Math.floor(event.clientX - rect.left);

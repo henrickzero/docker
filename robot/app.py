@@ -16,6 +16,8 @@ from pydantic import BaseModel
 from datetime import datetime
 import time
 
+countTab = 0 
+
 class GenericRequest(BaseModel):
     id: Optional[int] = None
     type: Optional[str] = None
@@ -93,7 +95,8 @@ def generic(generics: List[GenericRequest]):
 def open(request: GenericRequest):
     return openUrl(request.url)
 
-def openUrl(url: str):
+def openUrl(url: str): 
+    # pyautogui.hotkey('ctrl', 'w')
     subprocess.Popen(["sudo", 
     "google-chrome-stable", 
     "--user-data-dir=/tmp/chrome-profile",
@@ -106,8 +109,13 @@ def openUrl(url: str):
     "--no-first-run", 
     "--disable-translate", 
     "--force-device-scale-factor=0.8", 
-    "--kiosk", 
+    "--start-fullscreen",
+     "--test-type",
+     "--disable-infobars",
+     "--disable-save-password-bubble",
+     "--password-store=basic",
     url])
+    pyautogui.hotkey('f11')
     return {"status": "open"}
 
 
@@ -159,6 +167,22 @@ def scroll(deltaY: int):
     
     return {"status": "Scroll", "deltaY": deltaY}
 
+@app.post("/open")
+def open(request: GenericRequest):
+    return openUrl(request.url)
+
+
+# @app.get("/getx")
+# def getz(key: key):
+#     pyautogui.hotkey('ctrl', 'shift', 'l')
+#     return {"status": "get"}
+
+@app.get("/getvalue")
+def getValue():
+    pyautogui.hotkey('ctrl', 'shift', 'j')
+    return {"status": "get"}
+
+
 @app.post("/press/")
 def press_key(key: str):
     if key == 'ArrowLeft':
@@ -172,25 +196,36 @@ def press_key(key: str):
     elif key == '':
         pyautogui.press('space')
     else:
-        pyautogui.press(key)
-    
+        pyautogui.press(key)    
     return {"status": "Tecla pressionada", "key": key}
 
 # subprocess.Popen(["firefox","--kiosk", "https://www.investidor.b3.com.br/login?utm_source=B3_MVP&utm_medium=HM_PF&utm_campaign=menu"])
+
+
 subprocess.Popen(["sudo", 
 "google-chrome-stable", 
 "--user-data-dir=/tmp/chrome-profile",
 "--no-sandbox",
 "--disable-features=AutoUpdate", 
-"--disable-dev-shm-usage",
 # "--disable-gpu",
 "--disable-extensions", 
 "--no-default-browser-check", 
 "--no-first-run", 
 "--disable-translate", 
 "--force-device-scale-factor=0.8", 
-"--kiosk", 
+# "--kiosk", 
+"--start-fullscreen",
+"--test-type",
+"--disable-infobars",
+"--disable-dev-shm-usage",
+"--disable-save-password-bubble",
+"--password-store=basic",
 "https://www.google.com"])
+
+pyautogui.hotkey('f11')
+
+
+
 
 subprocess.Popen(["python","/home/ubuntu/stream.py"])
 
