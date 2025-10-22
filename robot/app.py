@@ -67,6 +67,23 @@ print("Iniciando o FastAPI...")
 def home():
     return {"message": "API de Automação Remota Ativa"}
 
+
+# for (let i = 0; i < sessionStorage.length; i++) {
+#   const key = sessionStorage.key(i);
+#   const value = sessionStorage.getItem(key);
+
+#   fetch('http://127.0.0.1:8000/set_value', {
+#     method: 'POST',
+#     headers: {
+#       'Content-Type': 'application/json'
+#     },
+#     body: JSON.stringify({ key, value })
+#   })
+#   .then(res => res.json())
+#   .then(data => console.log(`Enviado ${key}:`, data))
+#   .catch(err => console.error(`Erro ao enviar ${key}:`, err));
+# }
+
 # Endpoint para armazenar chave e valor na variável global
 @app.post("/set_value/")
 def set_value(map: MapRequest):
