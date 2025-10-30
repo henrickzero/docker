@@ -7,3 +7,4 @@ robot/web/dist
 ia/chroma_storage
 ia/chroma_storage_local
 drupal
+nodered/data
