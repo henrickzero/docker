@@ -1,9 +1,10 @@
 services:
   nodered:
-    image: nodered/node-red:latest
+    build: .
     container_name: nodered
     ports:
       - "1880:1880"
     volumes:
       - ./data:/data
     restart: unless-stopped
+    # O command é definido no entrypoint.sh → não precisa aqui
