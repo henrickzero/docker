@@ -1,25 +1,29 @@
 services:
-  mongodb:
-      image: mongo:4.4.6
-      container_name: mongo
-      restart: always
-      environment:
-       - MONGO_INITDB_ROOT_USERNAME=usuario
-       - MONGO_INITDB_ROOT_PASSWORD=senha
-      volumes:
-        - ./mongo_data:/data/db
   postgres:
-    image: postgres:latest
-    container_name: postgres_db
+    image: postgres:16-alpine
+    # arm32v7/postgres:16.0-alpine
+    container_name: postgres
     restart: always
     environment:
-      POSTGRES_USER: usuario
-      POSTGRES_PASSWORD: senha
-      POSTGRES_DB: n8n
+      POSTGRES_USER: n8n
+      POSTGRES_PASSWORD: brcodigoK88
+      POSTGRES_DB: n8n-db
     ports:
       - "5432:5432"
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    command: >
+      redis-server --port 6379 --appendonly yes
+    volumes:
+      - evolution_redis:/data
+    expose:
+      - "6379"
+
   n8n:
     image: n8nio/n8n:latest
     container_name: n8n
@@ -34,41 +38,58 @@ services:
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
       - WEBHOOK_URL=https://n8n.3dzipado.com/
+      - N8N_SECURE_COOKIE=false
+      
       - DB_TYPE=postgresdb
-      - DB_POSTGRESDB_DATABASE=n8n
-      - DB_POSTGRESDB_HOST=postgres_db
+      - DB_POSTGRESDB_DATABASE=n8n-db
+      - DB_POSTGRESDB_HOST=postgres
       - DB_POSTGRESDB_PORT=5432
-      - DB_POSTGRESDB_USER=usuario
-      - DB_POSTGRESDB_PASSWORD=senha
+      - DB_POSTGRESDB_USER=n8n
+      - DB_POSTGRESDB_PASSWORD=brcodigoK88
+      - DB_POSTGRESDB_SCHEMA=n8n
+
     depends_on:
         - postgres
     volumes:
-      - ./n8n_data:/home/node/.n8n
+      - n8n_data:/home/node/.n8n
 
   evolution-api:
-    image: atendai/evolution-api:v1.8.2
+    image: atendai/evolution-api:v2.2.3
     container_name: evolution_api
     restart: always
     ports:
-      - "8080:8080"
+      - "5679:8080"
     environment:
       - AUTHENTICATION_API_KEY=8baefbbb1921ca918862eb94b4a7a1d7
       - DATABASE_ENABLED=true
-      - DATABASE_CONNECTION_URI=mongodb://usuario:senha@mongo:27017/?authSource=admin&readPreference=primary&ssl=false&directConnection=true
-      - DATABASE_CONNECTION_DB_PREFIX_NAME=evo
-      - DATABASE_SAVE_DATA_INSTANCE=false
-      - DATABASE_SAVE_DATA_NEW_MESSAGE=false
-      - DATABASE_SAVE_MESSAGE_UPDATE=false
-      - DATABASE_SAVE_DATA_CONTACTS=false
-      - DATABASE_SAVE_DATA_CHATS=false
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://n8n:brcodigoK88@postgres:5432/n8n-db?schema=public
+      - DATABASE_CONNECTION_CLIENT_NAME=evolution_exchange
+
+      - DATABASE_SAVE_DATA_INSTANCE=true
+      - DATABASE_SAVE_DATA_NEW_MESSAGE=true
+      - DATABASE_SAVE_MESSAGE_UPDATE=true
+      - DATABASE_SAVE_DATA_CONTACTS=true
+      - DATABASE_SAVE_DATA_CHATS=true
+      - DATABASE_SAVE_DATA_LABELS=true
+      - DATABASE_SAVE_DATA_HISTORIC=true
+
+      - CACHE_REDIS_ENABLED=true
+      - CACHE_REDIS_URI=redis://redis:6379/6
+      - CACHE_REDIS_PREFIX_KEY=evolution
+      - CACHE_REDIS_SAVE_INSTANCES=false
+      - CACHE_LOCAL_ENABLED=false
+
     depends_on:
-        - mongodb
+        - postgres
+        - redis
     volumes:
       - ./evolution_store:/evolution/store
       - ./evolution_instances:/evolution/instances
 
 volumes:
   n8n_data:
-  mongo_data:
+  postgres_data:
   evolution_store:
   evolution_instances:
+  evolution_redis:
