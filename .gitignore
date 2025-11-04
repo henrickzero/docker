@@ -8,3 +8,8 @@ ia/chroma_storage
 ia/chroma_storage_local
 drupal
 nodered/data
+n8n/postgres_data
+n8n/evolution_redis
+n8n/n8n_data
+n8n/evolution_store
+n8n/evolution_instances
