@@ -5,6 +5,6 @@ services:
     ports:
       - "1880:1880"
     volumes:
-      - ./data:/data
-    restart: unless-stopped
+      - ./data-node-red:/data
+    restart: always
     # O command é definido no entrypoint.sh → não precisa aqui

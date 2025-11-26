@@ -53,7 +53,7 @@ services:
     depends_on:
         - postgres
     volumes:
-      - n8n_data:/home/node/.n8n
+      - ./n8n_data:/home/node/.n8n
 
   evolution-api:
     image: evoapicloud/evolution-api:latest
@@ -101,6 +101,15 @@ services:
     volumes:
       - ./evolution_store:/evolution/store
       - ./evolution_instances:/evolution/instances
+
+  nodered:
+    image: nodered/node-red:latest
+    container_name: nodered
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./data-node-red:/data
+    restart: always
 
 volumes:
   n8n_data:
